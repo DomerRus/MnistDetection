@@ -8,7 +8,7 @@
 
 The REST API to the example app is described below.
 
-## Search masks on image (return image)
+## Search number on image (return image)
 
 ### Request
 
