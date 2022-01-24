@@ -1,7 +1,7 @@
 
 # Mnist detection YOLO v5
 
-<img src="https://storage.googleapis.com/tfds-data/visualization/fig/mnist-3.0.1.png" width="500">
+<img src="https://user-images.githubusercontent.com/13705168/150740735-2539152d-77fe-4de1-ab75-16745f52bb77.png" width="500">
 
 
 # REST API
