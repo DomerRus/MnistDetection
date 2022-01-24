@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  eureka:
+    container_name: eureka-mnist
+    image: ityce4ka/eureka:jdk11
+    restart: unless-stopped
+    build: ./eureka
+    ports:
+      - "8761:8761"
+
+  gateway:
+    container_name: gateway-mnist
+    image: ityce4ka/gateway-mnist:jdk11
+    restart: unless-stopped
+    build: ./gateway
+    environment:
+      PORT: 8080
+      EUREKA_HOST: eureka
+      EUREKA_PORT: 8761
+    ports:
+      - "8090:8080"
+    depends_on:
+      - eureka
+
+  yolo-service:
+    container_name: yolo-service-mnist
+    image: ityce4ka/yolo-service-mnist:jdk11
+    restart: unless-stopped
+    build: ./yolo-service
+    environment:
+      PORT: 8081
+      EUREKA_HOST: eureka
+      EUREKA_PORT: 8761
+    ports:
+      - "8091:8081"
+    depends_on:
+      - eureka
+
