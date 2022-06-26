@@ -26,6 +26,7 @@ services:
     container_name: yolo-service-mnist
     image: ityce4ka/yolo-service-mnist:jdk11
     restart: unless-stopped
+    platform: linux/amd64
     build: ./yolo-service
     environment:
       PORT: 8081

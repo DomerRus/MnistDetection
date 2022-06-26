@@ -1,6 +1,7 @@
 package ru.ityce4ka.yolo.rest;
 
 
+import ai.djl.modality.cv.Image;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,25 +24,25 @@ public class DetectResource {
 
     private final YoloService service;
 
-    @PostMapping("/img")
-    ResponseEntity<String> detectMasksImage(HttpServletResponse response,
-                                    @RequestPart("photo") MultipartFile photo) throws IOException {
-        final ByteArrayOutputStream image = service.maskDetectImage(photo.getInputStream());
-        try(OutputStream os = response.getOutputStream()){
-            response.setHeader("Content-Type", "image/jpeg");
-            response.setHeader("Content-Disposition","attachment; result.jpg");
-            response.setHeader("Content-Length", String.valueOf((image).size()));
-            (image).writeTo(os);
-            response.flushBuffer();
-            return ResponseEntity.ok().build();
-        }catch (Exception ex) {
-            log.error(ex.toString());
-            return ResponseEntity.noContent().build();
-        }
-    }
+//    @PostMapping("/img")
+//    ResponseEntity<String> detectMasksImage(HttpServletResponse response,
+//                                    @RequestPart("photo") MultipartFile photo) throws IOException {
+//        final ByteArrayOutputStream image = service.maskDetectImage(photo.getInputStream());
+//        try(OutputStream os = response.getOutputStream()){
+//            response.setHeader("Content-Type", "image/jpeg");
+//            response.setHeader("Content-Disposition","attachment; result.jpg");
+//            response.setHeader("Content-Length", String.valueOf((image).size()));
+//            (image).writeTo(os);
+//            response.flushBuffer();
+//            return ResponseEntity.ok().build();
+//        }catch (Exception ex) {
+//            log.error(ex.toString());
+//            return ResponseEntity.noContent().build();
+//        }
+//    }
 
     @PostMapping
-    List<DetectResponseDto> detectMasks(@RequestPart("photo") MultipartFile photo) throws IOException {
+    List<Image> detectMasks(@RequestPart("photo") MultipartFile photo) throws IOException {
          return service.maskDetect(photo.getInputStream());
     }
 

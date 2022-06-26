@@ -17,6 +17,7 @@ RUN mkdir /app
 RUN mkdir /yolo
 
 COPY ./best.torchscript /yolo/best.torchscript
+COPY ./anime.pt /yolo/anime.pt
 COPY ./mnist.yaml /yolo/mnist.yaml
 
 COPY ./lib /opencvlib

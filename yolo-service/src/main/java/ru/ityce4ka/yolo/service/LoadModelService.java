@@ -12,6 +12,7 @@ import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
+import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.Pipeline;
 import ai.djl.translate.Translator;
 import lombok.extern.slf4j.Slf4j;
@@ -25,24 +26,36 @@ import java.io.IOException;
 public class LoadModelService {
 
 
-    public ZooModel<Image, DetectedObjects> model;
+    public ZooModel<Image, Image> model;
 
     private LoadModelService() throws ModelNotFoundException, MalformedModelException, IOException {
-        Pipeline pipeline = new Pipeline();
-        pipeline.add(new Resize(416, 416));
-        pipeline.add(new ToTensor());
-        Translator<Image, DetectedObjects> translator = YoloV5Translator.builder().setPipeline(pipeline).optSynsetArtifactName("mnist.yaml").build();
-        Criteria<Image, DetectedObjects> criteria =
+        Criteria<Image, Image> criteria =
                 Criteria.builder()
-                        .optApplication(Application.CV.OBJECT_DETECTION)
-                        .setTypes(Image.class, DetectedObjects.class)
-                        .optDevice(Device.cpu())
+                        .optApplication(Application.CV.IMAGE_ENHANCEMENT)
+                        .setTypes(Image.class, Image.class)
                         .optModelUrls("yolo")
-                        .optModelName("best.torchscript")
-                        .optTranslator(translator)
-                        .optArgument("truncation", 0.25f)
+                        .optModelName("anime.pt")
+                        .optOption("Tags", "serve")
+                        .optOption("SignatureDefKey", "serving_default")
+                        .optTranslator(new SuperResolutionTranslator())
                         .optEngine("PyTorch")
+                        .optProgress(new ProgressBar())
                         .build();
+//        Pipeline pipeline = new Pipeline();
+//        pipeline.add(new Resize(416, 416));
+//        pipeline.add(new ToTensor());
+//        Translator<Image, DetectedObjects> translator = YoloV5Translator.builder().setPipeline(pipeline).optSynsetArtifactName("mnist.yaml").build();
+//        Criteria<Image, DetectedObjects> criteria =
+//                Criteria.builder()
+//                        .optApplication(Application.CV.OBJECT_DETECTION)
+//                        .setTypes(Image.class, DetectedObjects.class)
+//                        .optDevice(Device.cpu())
+//                        .optModelUrls("yolo")
+//                        .optModelName("best.torchscript")
+//                        .optTranslator(translator)
+//                        .optArgument("truncation", 0.25f)
+//                        .optEngine("PyTorch")
+//                        .build();
         this.model = ModelZoo.loadModel(criteria);
     }
 }
